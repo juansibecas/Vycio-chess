@@ -4,6 +4,11 @@ import chess.pgn as pgn
 
 
 def load_data():
+    """
+    Loads all data for the NN. Returns the input and output
+    vectors of all moves made by the player in each game.
+    """
+
     pgn_casual = open("Vycio Casual Rapid.pgn")
 
     pgn_rated = open("Vycio Rated Rapid.pgn")
@@ -51,6 +56,11 @@ def load_data():
 
 
 def get_outputs_from_game_boards_and_moves(boards, moves, color):
+    """
+    Gets the coded output vector and the piece chosen(not used yet)
+    for the NN given a certain board and the move made by the player.
+    """
+
     outputs = []
     j = 0
     for board, move in zip(boards, moves):
@@ -77,6 +87,11 @@ def get_outputs_from_game_boards_and_moves(boards, moves, color):
 
 
 def vector_from_move(board, move):
+    """
+    Codes the output vector(1x4096) given a move.
+    4096 represents the 64 squares to move from by the 64 squares to move to.
+    """
+
     from_square = move.from_square
 
     to_square = move.to_square
@@ -89,6 +104,11 @@ def vector_from_move(board, move):
 
 
 def get_inputs_from_game_boards(boards, color):
+    """
+    Gets all inputs for the NN from a list of boards and
+    the color the player was in each of those boards.
+    """
+
     inputs = []
 
     for j, board in enumerate(boards):
@@ -105,6 +125,12 @@ def get_inputs_from_game_boards(boards, color):
 
 
 def array_from_board(board, color):
+    """
+    Collects a 8x8x6 array from a board. Each of the 6 channels
+    responds to a single piece type, coding it as a 1 for
+    an ally piece and a -1 for an enemy piece.
+    """
+
     array = np.zeros((8, 8, 6))  # 6 8x8 planes
     ally_squares = []
     enemy_squares = []
@@ -145,6 +171,9 @@ def array_from_board(board, color):
 
 
 def index_8x8_from_integer(num):
+    """
+    Gets 8x8 row and column numbers from a 0-63 input
+    """
     col = num % 8
     row = int((num - col)/8)
     return row, col

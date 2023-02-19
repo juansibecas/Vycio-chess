@@ -3,7 +3,11 @@ import numpy as np
 from load import array_from_board
 
 
-def play(model):  # plays as white only
+def play(model):  # plays as white only for now
+    """
+    Used to play against a previously trained model.
+    """
+
     board = chess.Board()
     array = np.zeros((1, 8, 8, 6))
     while True:
@@ -12,7 +16,7 @@ def play(model):  # plays as white only
 
         while True:
             prediction = output.argmax()
-            to_square = int(prediction % 64)
+            to_square = int(prediction % 64)  # Decodes the move
             from_square = int((prediction - to_square)/64)
             ai_uci = chess.SQUARE_NAMES[from_square] + chess.SQUARE_NAMES[to_square]
             ai_move = chess.Move.from_uci(ai_uci)

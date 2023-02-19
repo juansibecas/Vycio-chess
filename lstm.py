@@ -2,6 +2,9 @@ import tensorflow as tf
 
 
 def get_model():
+    """
+    Builds the sequential NN model.
+    """
 
     model_settings = {
         "type": "Convolutional with Batch Normalization",
@@ -55,6 +58,10 @@ def get_model():
 
 
 def get_labels(data):
+    """
+    Returns all labels from the data list.
+    """
+
     labels = []
     for game in data:
         moves = game['outputs']
@@ -67,6 +74,10 @@ def get_labels(data):
 
 
 def get_inputs(data):
+    """
+    Returns all inputs from the data list.
+    """
+
     inputs = []
 
     for game in data:
