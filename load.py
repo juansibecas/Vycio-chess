@@ -3,6 +3,7 @@ import chess
 import chess.pgn as pgn
 import tensorflow as tf
 
+USERNAMES = ["Vycio", "noquieronombre-gracias"]
 
 def load_data():
     """
@@ -10,34 +11,53 @@ def load_data():
     the input and output vectors for all moves made by the player in each game.
     """
 
-    pgn_casual = open("Vycio Casual Rapid.pgn")
+    pgn_white_lc = open("Vycio White LC.pgn")
 
-    pgn_rated = open("Vycio Rated Rapid.pgn")
+    pgn_black_lc = open("Vycio Black LC.pgn")
 
-    rated_games = []
+    pgn_white_chesscom = open("Vycio White Chesscom.pgn")
 
-    casual_games = []
+    pgn_black_chesscom = open("Vycio Black Chesscom.pgn")
 
-    for i in range(500):  # High number(has to be bigger than the amount of games in each pgn file)
-        c_game = pgn.read_game(pgn_casual)
-        r_game = pgn.read_game(pgn_rated)
-        if c_game is not None:
-            casual_games.append(c_game)
-        if r_game is not None:
-            rated_games.append(r_game)
-        if c_game is None and r_game is None:
+    games_white = []
+
+    games_black = []
+
+    # Lichess games
+    for i in range(1000):  # High number(has to be bigger than the amount of games in each pgn file)
+        w_game = pgn.read_game(pgn_white_lc)
+        b_game = pgn.read_game(pgn_black_lc)
+        if w_game is not None:
+            games_white.append(w_game)
+        if b_game is not None:
+            games_black.append(b_game)
+        if w_game is None and b_game is None:
+            break
+
+    # Chess.com games
+    for i in range(1000):  # High number(has to be bigger than the amount of games in each pgn file)
+        w_game = pgn.read_game(pgn_white_chesscom)
+        b_game = pgn.read_game(pgn_black_chesscom)
+        if w_game is not None:
+            games_white.append(w_game)
+        if b_game is not None:
+            games_black.append(b_game)
+        if w_game is None and b_game is None:
             break
 
     games = []
-    games.extend(casual_games)
-    games.extend(rated_games)
+    games.extend(games_white)
+    games.extend(games_black)
 
     data = []
 
     for game in games:  # Gets color, boards, moves and url
         game_data = {'color': 0, 'boards': [], 'moves': game.mainline_moves(), 'url': game.headers.get('Site')}
 
-        if game.headers.get('White') == 'Vycio':
+        if game.headers.get('Site') == "Chess.com":
+            game_data['url'] = game.headers.get('Link')
+
+        if game.headers.get('White') in USERNAMES:
             game_data['color'] = 'White'
         else:
             game_data['color'] = 'Black'
