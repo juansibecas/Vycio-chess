@@ -1,6 +1,6 @@
 import chess
 import numpy as np
-from load import array_from_board
+from load import input_array_from_board
 
 
 def play(model):  # plays as white only for now TODO play as black too
@@ -11,7 +11,7 @@ def play(model):  # plays as white only for now TODO play as black too
     board = chess.Board()
     array = np.zeros((1, 8, 8, 6))
     while True:
-        array[0][:][:][:] = array_from_board(board, "White")
+        array[0][:][:][:] = input_array_from_board(board, "White")
         output = model.predict(array)
 
         while True:

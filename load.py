@@ -1,6 +1,7 @@
 import numpy as np
 import chess
 import chess.pgn as pgn
+import tensorflow as tf
 
 
 def load_data():
@@ -139,8 +140,6 @@ def input_array_from_board(board, color):
     """
 
     array = np.zeros((8, 8, 6))  # 6 8x8 planes
-    ally_squares = []
-    enemy_squares = []
 
     if color == 'White':
         ally = 1  # 1 is white in py-chess
@@ -152,29 +151,19 @@ def input_array_from_board(board, color):
     for piece in range(1, 7):  # 1 to 6 for pawn, knight, bishop, rook, queen and king in that order
 
         if color == 'White':
-            ally_square_set = board.pieces(piece, ally)
+            ally_square_set = board.pieces(piece, ally)  # Stores the squares in which the player has a {piece}
             enemy_square_set = board.pieces(piece, enemy)
         else:
-            ally_square_set = board.pieces(piece, ally).mirror()
+            ally_square_set = board.pieces(piece, ally).mirror()  # Mirror when playing black
             enemy_square_set = board.pieces(piece, enemy).mirror()
 
-        # TODO make this better
-        for square in ally_square_set:
-            ally_squares.append(square)
+        # Fills the array with 1 and -1
+        for ally_square, enemy_square in zip(ally_square_set, enemy_square_set):
+            row, col = index_8x8_from_integer(ally_square)
+            array[row, col, piece - 1] = 1
+            row, col = index_8x8_from_integer(enemy_square)
+            array[row, col, piece - 1] = -1
 
-        for square in enemy_square_set:
-            enemy_squares.append(square)
-
-        for square in ally_squares:
-            row, col = index_8x8_from_integer(square)
-            array[row, col, piece-1] = 1
-
-        for square in enemy_squares:
-            row, col = index_8x8_from_integer(square)
-            array[row, col, piece-1] = -1
-
-        ally_squares.clear()
-        enemy_squares.clear()
     return array
 
 
