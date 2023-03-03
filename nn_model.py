@@ -56,33 +56,3 @@ def get_model():
 
     return model, model_settings
 
-
-def get_labels(data):
-    """
-    Returns all labels from the data list.
-    """
-
-    labels = []
-    for game in data:
-        moves = game['outputs']
-        for move in moves:
-            labels.append(move['output_move'])
-
-    labels = tf.keras.utils.to_categorical(labels, num_classes=4096)
-
-    return labels
-
-
-def get_inputs(data):
-    """
-    Returns all inputs from the data list.
-    """
-
-    inputs = []
-
-    for game in data:
-        boards = game['inputs']
-        for board in boards:
-            inputs.append(board)
-
-    return inputs

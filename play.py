@@ -3,7 +3,7 @@ import numpy as np
 from load import array_from_board
 
 
-def play(model):  # plays as white only for now
+def play(model):  # plays as white only for now TODO play as black too
     """
     Used to play against a previously trained model.
     """
