@@ -153,13 +153,11 @@ def get_inputs_from_game_boards(boards, color):
 
 def input_array_from_board(board, color):
     """
-    Returns a 8x8x6 array from a board. Each of the 6 channels
-    responds to a single piece type, coding it as a 1 for
-    an ally piece and a -1 for an enemy piece.
-    TODO make 12 channels, 6 for ally and 6 for enemy
+    Returns a 8x8x12 array from a board. Each of the 12 channels
+    responds to a single piece type (first 6 for ally, last 6 for enemy).
     """
 
-    array = np.zeros((8, 8, 6))  # 6 8x8 planes
+    array = np.zeros((8, 8, 12))  # 12 8x8 planes
 
     if color == 'White':
         ally = 1  # 1 is white in py-chess
@@ -180,9 +178,9 @@ def input_array_from_board(board, color):
         # Fills the array with 1 and -1
         for ally_square, enemy_square in zip(ally_square_set, enemy_square_set):
             row, col = index_8x8_from_integer(ally_square)
-            array[row, col, piece - 1] = 1
+            array[row, col, piece - 1] = 1                  # Channels 1 to 6 for ally
             row, col = index_8x8_from_integer(enemy_square)
-            array[row, col, piece - 1] = -1
+            array[row, col, piece - 1 + 6] = 1              # Channels 7 to 12 for enemy
 
     return array
 

@@ -15,7 +15,7 @@ def get_model():
     model = tf.keras.Sequential()
 
     # Input
-    model.add(tf.keras.layers.Conv2D(256, (3, 3), activation="relu", input_shape=(8, 8, 6)))
+    model.add(tf.keras.layers.Conv2D(256, (3, 3), activation="relu", input_shape=(8, 8, 12)))
     model.add(tf.keras.layers.BatchNormalization())
     model.add(tf.keras.layers.Activation('relu'))
 
